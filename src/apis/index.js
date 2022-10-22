@@ -13,7 +13,7 @@ export const storeUser = ({nickname, ...rest}) => api({
   method: 'POST',
   url: import.meta.env.VITE_BACKEND + '/api/notion-post',
   data: {
-    db: "fcfdcb93973a4df19808c6616a91f79b",
+    db: import.meta.env.VITE_NOTION_USER_DB,
     primary: {
       name: 'nickname',
       content: nickname.content,
@@ -27,7 +27,7 @@ export const me = (nickname, realname) => api({
   method: 'GET',
   url: import.meta.env.VITE_BACKEND + '/api/notion-show',
   params: {
-    db: "fcfdcb93973a4df19808c6616a91f79b",
+    db: import.meta.env.VITE_NOTION_USER_DB,
     primary: nickname.content,
     realname,
   },
@@ -38,7 +38,7 @@ export const login = (nickname, code) => api({
   method: 'POST',
   url: import.meta.env.VITE_BACKEND + '/api/login',
   data: {
-    db: "fcfdcb93973a4df19808c6616a91f79b",
+    db: import.meta.env.VITE_NOTION_USER_DB,
     nickname, code,
   }
 })
@@ -47,7 +47,7 @@ export const appointment = (data) => api({
   method: 'POST',
   url: import.meta.env.VITE_BACKEND + '/api/notion-post',
   data: {
-    db: "f286c7c472df4918a2006939f019d60d",
+    db: import.meta.env.VITE_NOTION_APPOINT_DB,
     primary: {
       name: 'name',
       content: `study ${data.date.content}`,
@@ -65,7 +65,7 @@ export const appointmentList = (date) => api({
   method: 'GET',
     url: import.meta.env.VITE_BACKEND + '/api/notion-show',
   params: {
-    db: "f286c7c472df4918a2006939f019d60d",
+    db: import.meta.env.VITE_NOTION_APPOINT_DB,
     primary: `study ${date}`,
   },
   headers: baseHeaders,

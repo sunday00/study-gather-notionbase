@@ -1,12 +1,16 @@
 import dayjs from "dayjs";
 import weekday from 'dayjs/plugin/weekday'
-import {useEffect, useState} from "react";
-import {appointment} from "@/apis/index.js";
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
 import AppointmentList from "@c/Study/AppointmentList.jsx";
 import AppointmentCreater from "@c/Study/AppointmentCreater.jsx";
 
 dayjs.extend(weekday)
-const date = dayjs().weekday(7).format('YYYY-MM-DD')
+dayjs.extend(utc)
+dayjs.extend(timezone)
+const current = dayjs.tz(dayjs(), 'Asia/Seoul')
+const calculateThisSunday = current.day() ? 7 : 0
+const date = current.weekday(calculateThisSunday).format('YYYY-MM-DD')
 
 export default () => {
   return (<div>
