@@ -63,10 +63,10 @@ export const appointment = (data) => api({
 
 export const appointmentList = (date) => api({
   method: 'GET',
-    url: import.meta.env.VITE_BACKEND + '/api/notion-show',
+    url: import.meta.env.VITE_BACKEND + '/api/notion-show-ends',
   params: {
     db: import.meta.env.VITE_NOTION_APPOINT_DB,
-    primary: `study ${date}`,
+    primary: date,
   },
   headers: baseHeaders,
 })

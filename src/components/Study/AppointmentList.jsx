@@ -2,12 +2,12 @@ import {useCallback, useEffect, useState} from "react";
 import {appointmentList} from "@/apis/index.js";
 
 export default ({date}) => {
-  const [appointment, setAppointment] = useState({})
+  const [appointments, setAppointments] = useState([{}])
 
   useEffect(() => {
     appointmentList(date)
       .then(res => {
-        setAppointment(res.data)
+        setAppointments(res.data)
       })
   }, [date])
 
@@ -34,13 +34,17 @@ export default ({date}) => {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>{appointment?.type?.select?.name}</td>
-          <td>{appointment?.date?.date?.start}</td>
-          <td>{appointment?.place?.rich_text[0]?.plain_text}</td>
-          <td>{appointment?.price?.number}</td>
-          <td>{getStateElement(appointment?.state?.select?.name)}</td>
-        </tr>
+      {
+        appointments && appointments.map((appointment, idx) =>
+          <tr key={idx}>
+            <td>{appointment?.type?.select?.name}</td>
+            <td>{appointment?.date?.date?.start}</td>
+            <td>{appointment?.place?.rich_text[0]?.plain_text}</td>
+            <td>{appointment?.price?.number}</td>
+            <td>{getStateElement(appointment?.state?.select?.name)}</td>
+          </tr>
+        )
+      }
       </tbody>
     </table>
   </div>)

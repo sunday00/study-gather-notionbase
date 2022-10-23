@@ -75,6 +75,29 @@ const buildRestQuery = ({primary, ...rest}) => {
   return result
 }
 
+const buildEndsQuery = ({primary, ...rest}) => {
+  const result = [
+    {
+      property: "title",
+      title: { ends_with: primary }
+    }
+  ]
+
+  for(let property in rest) {
+    switch (rest[property].type) {
+      default:
+        result.push({
+          property: property,
+          rich_text: {
+            equals: rest[property].content
+          }
+        })
+    }
+  }
+
+  return result
+}
+
 export const post = ({db, ...data}) => api({
   method: 'POST',
   url: process.env.NOTION_HOST + '/pages',
@@ -104,6 +127,17 @@ export const showWhere = ({db, ...query}) => api({
   data: {
     filter: {
       and: buildRestQuery(query)
+    },
+  },
+  headers: baseHeaders(),
+})
+
+export const showEnds = ({db, ...query}) => api({
+  method: 'POST',
+  url: `${process.env.NOTION_HOST}/databases/${db}/query`,
+  data: {
+    filter: {
+      or: buildEndsQuery(query)
     },
   },
   headers: baseHeaders(),

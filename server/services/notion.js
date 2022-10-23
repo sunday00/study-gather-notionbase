@@ -1,4 +1,4 @@
-import {post, show} from "../external/index.js";
+import {post, show, showEnds} from "../external/index.js";
 
 export default {
   async post(ctx) {
@@ -18,6 +18,18 @@ export default {
       .then((res) => {
         ctx.status = 200
         ctx.body = res?.data?.results[0]?.properties
+      }).catch((e) => {
+        console.dir(e.response.data)
+        ctx.status = e.response.data.status
+        ctx.body = e.response.data.message
+      })
+  },
+
+  async showEnds(ctx) {
+    await showEnds(ctx.request.query)
+      .then((res) => {
+        ctx.status = 200
+        ctx.body = res?.data?.results?.map((r) => r.properties)
       }).catch((e) => {
         console.dir(e.response.data)
         ctx.status = e.response.data.status
