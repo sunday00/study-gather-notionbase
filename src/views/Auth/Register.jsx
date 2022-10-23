@@ -49,7 +49,7 @@ export default () => {
 
             setLogged(true)
 
-            redirect('/')
+            redirect('/appointment')
           })
       })
   }

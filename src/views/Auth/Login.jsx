@@ -30,7 +30,7 @@ export default () => {
 
         setLogged(true)
 
-        redirect('/')
+        redirect('/appointment')
       }).catch(e => {
         if(e.response.status === 401) window.alert('닉네임이나 비밀코드가 잘못되었습니다.')
       })

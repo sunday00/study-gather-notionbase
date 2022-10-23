@@ -1,25 +1,11 @@
 import {NavLink} from "react-router-dom";
 import useGlobal from "@/hooks/useGlobal.jsx";
-import {useCallback, useEffect} from "react";
-import {useRecoilState} from "recoil";
+import {useRecoilValue} from "recoil";
 import {recoilLogged} from "@/store/auth.js";
-import {tokenIsValid} from "@/utils/auth.js";
 
 export default () => {
-  const [logged, setLogged] = useRecoilState(recoilLogged)
   const mainUrl = useGlobal('MAIN_URL');
-  const isLogged = useCallback(
-    () => {
-      tokenIsValid()
-    },
-    [],
-  );
-
-  useEffect(() => {
-    return () => {
-      setLogged(isLogged())
-    }
-  }, []);
+  const logged = useRecoilValue(recoilLogged)
 
   return (
     <nav className="flex mb-4 p-4 gap-2 justify-center">
