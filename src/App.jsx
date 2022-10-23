@@ -1,11 +1,10 @@
 import Home from '@v/Home.jsx';
 import {RecoilRoot} from "recoil";
-import {NavLink, Route, Routes} from "react-router-dom";
-import useGlobal from "@/hooks/useGlobal.jsx";
+import {Route, Routes} from "react-router-dom";
+import AuthApp from "@v/AuthApp.jsx";
 import Register from "@v/Auth/Register";
 import Login from "@v/Auth/Login.jsx";
 import Nav from "@c/Nav.jsx";
-import Appointment from "@v/Study/Appointment";
 
 function App() {
   return (
@@ -20,7 +19,7 @@ function App() {
             <Route path="/" element={<Home/>} exact={true}></Route>
             <Route path={"/register"} element={<Register />}></Route>
             <Route path={"/login"} element={<Login />}></Route>
-            <Route path={"/appointment"} element={<Appointment />}></Route>
+            <Route path="*" element={<AuthApp />} />
           </Routes>
         </section>
       </div>

@@ -1,17 +1,16 @@
 import {NavLink} from "react-router-dom";
 import useGlobal from "@/hooks/useGlobal.jsx";
 import {useCallback, useEffect} from "react";
-import dayjs from "dayjs";
-import {useRecoilState, useRecoilValue} from "recoil";
+import {useRecoilState} from "recoil";
 import {recoilLogged} from "@/store/auth.js";
+import {tokenIsValid} from "@/utils/auth.js";
 
 export default () => {
   const [logged, setLogged] = useRecoilState(recoilLogged)
   const mainUrl = useGlobal('MAIN_URL');
   const isLogged = useCallback(
     () => {
-      const token = atob(localStorage.getItem('token'))
-      return token && dayjs(token.split('.').last()).isAfter(dayjs());
+      tokenIsValid()
     },
     [],
   );
@@ -19,7 +18,7 @@ export default () => {
   useEffect(() => {
     return () => {
       setLogged(isLogged())
-    };
+    }
   }, []);
 
   return (
