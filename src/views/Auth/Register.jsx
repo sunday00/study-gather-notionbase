@@ -3,7 +3,7 @@ import {me, storeUser} from "@/apis/index.js";
 import {useNavigate} from "react-router-dom";
 import dayjs from "dayjs";
 import {useSetRecoilState} from "recoil";
-import {recoilLogged} from "@/store/auth.js";
+import {recoilLogged, recoilName, recoilUserId} from "@/store/auth.js";
 
 export default () => {
   const [data, setData] = useState({
@@ -15,6 +15,8 @@ export default () => {
     secret_code: { type: 'string', content: ''},
   })
   const setLogged = useSetRecoilState(recoilLogged)
+  const setName = useSetRecoilState(recoilName)
+  const setUserId = useSetRecoilState(recoilUserId)
 
   const redirect = useNavigate()
 
@@ -27,8 +29,6 @@ export default () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
-    console.log(data)
 
     me(data.nickname, data.realname)
       .then(res => {
@@ -44,10 +44,15 @@ export default () => {
           .then((res) => {
             localStorage.setItem(
               'token',
-              btoa(`${data.nickname}.${import.meta.env.VITE_SALT}.${data.secret_code}.${dayjs().add(30, 'minutes').format('YYYY-MM-DDTHH:mm:ss')}`)
+              btoa(`${data.nickname.content}.${import.meta.env.VITE_SALT}.${data.secret_code.content}.${dayjs().add(30, 'minutes').format('YYYY-MM-DDTHH:mm:ss')}`)
             )
 
+            localStorage.setItem('name', data.realname.content)
+            localStorage.setItem('userId', res.data.id)
+
             setLogged(true)
+            setName(data.realname.content)
+            setUserId(res.data.id)
 
             redirect('/appointment')
           })

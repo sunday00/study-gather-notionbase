@@ -1,11 +1,22 @@
 import {NavLink} from "react-router-dom";
 import useGlobal from "@/hooks/useGlobal.jsx";
-import {useRecoilValue} from "recoil";
-import {recoilLogged} from "@/store/auth.js";
+import {useRecoilState, useSetRecoilState} from "recoil";
+import {recoilLogged, recoilName, recoilUserId} from "@/store/auth.js";
 
 export default () => {
   const mainUrl = useGlobal('MAIN_URL');
-  const logged = useRecoilValue(recoilLogged)
+  const [logged, setLogged] = useRecoilState(recoilLogged)
+  const setName = useSetRecoilState(recoilName)
+  const setUserId = useSetRecoilState(recoilUserId)
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('name')
+    localStorage.removeItem('userId')
+    setLogged(false)
+    setName('')
+    setUserId('')
+  }
 
   return (
     <nav className="flex mb-4 p-4 gap-2 justify-center">
@@ -15,6 +26,7 @@ export default () => {
       <NavLink className={ a => `btn btn-info active-${a.isActive}` } to={'/'}>Home</NavLink>
       { !logged && <NavLink className={ a => `btn btn-info active-${a.isActive}` } to={'/register'}>register</NavLink> }
       { !logged && <NavLink className={ a => `btn btn-info active-${a.isActive}` } to={'/login'}>login</NavLink>}
+      { logged &&  <NavLink className={ a => `btn btn-info active-${a.isActive}` } to={'/logout'} onClick={handleLogout}>logout</NavLink>}
       { logged &&  <NavLink className={ a => `btn btn-info active-${a.isActive}` } to={'/appointment'}>Appointment</NavLink>}
     </nav>
   )

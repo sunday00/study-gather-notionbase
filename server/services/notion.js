@@ -1,4 +1,4 @@
-import {post, show, showEnds} from "../external/index.js";
+import {post, show, showEnds, deleteById} from "../external/index.js";
 
 export default {
   async post(ctx) {
@@ -14,7 +14,14 @@ export default {
   },
 
   async show(ctx) {
-    await show(ctx.request.query)
+    const {db, primary, rest} = ctx.request.query
+
+    const data = {
+      db, primary,
+      ...JSON.parse(rest)
+    }
+
+    await show(data)
       .then((res) => {
         ctx.status = 200
         ctx.body = res?.data?.results[0]?.properties
@@ -29,11 +36,28 @@ export default {
     await showEnds(ctx.request.query)
       .then((res) => {
         ctx.status = 200
-        ctx.body = res?.data?.results?.map((r) => r.properties)
+        ctx.body = res?.data?.results?.map((r) => {
+          r.properties.id = r.id
+          return r.properties
+        })
       }).catch((e) => {
-        console.dir(e.response.data)
+        console.dir(e.response?.data)
         ctx.status = e.response.data.status
         ctx.body = e.response.data.message
       })
-  }
+  },
+
+  async deleteById(ctx) {
+    await deleteById(ctx.request.body)
+      .then(res => {
+        ctx.status = 204;
+        ctx.body = {
+          'message': 'successfully deleted'
+        }
+      }).catch(e => {
+        console.dir(e.response?.data)
+        ctx.status = e.response.data.status
+        ctx.body = e.response.data.message
+      })
+  },
 }

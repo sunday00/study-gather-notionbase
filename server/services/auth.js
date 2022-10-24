@@ -11,7 +11,11 @@ export default {
     }).then(res => {
       if(res.data?.results[0]?.properties) {
         ctx.status = 200
-        ctx.body = btoa(`${ctx.request.body.nickname}.${process.env.VITE_SALT}.${ctx.request.body.code}.${dayjs().add(30, 'minutes').format('YYYY-MM-DDTHH:mm:ss')}`)
+        ctx.body = {
+          id: res?.data?.results[0].id,
+          token: btoa(`${ctx.request.body.nickname}.${process.env.VITE_SALT}.${ctx.request.body.code}.${dayjs().add(30, 'minutes').format('YYYY-MM-DDTHH:mm:ss')}`),
+          name:  res.data?.results[0]?.properties.realname.rich_text[0].plain_text,
+        }
       } else {
         ctx.status = 401
         ctx.body = 'wrong nickname or code'

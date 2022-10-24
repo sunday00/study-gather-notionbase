@@ -11,6 +11,7 @@ router.get('/',(ctx, next) => {
 router.post('/api/notion-post', notion.post)
 router.get('/api/notion-show', notion.show)
 router.get('/api/notion-show-ends', notion.showEnds)
+router.delete('/api/notion-delete', notion.deleteById)
 
 router.post('/api/login', auth.login)
 

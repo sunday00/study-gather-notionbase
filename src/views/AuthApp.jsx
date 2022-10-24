@@ -1,5 +1,5 @@
-import {useRecoilState} from "recoil";
-import {recoilLogged} from "@/store/auth.js";
+import {useRecoilState, useSetRecoilState} from "recoil";
+import {recoilLogged, recoilName, recoilUserId} from "@/store/auth.js";
 import {Route, Routes, Navigate, useLocation} from "react-router-dom";
 import Appointment from "@v/Study/Appointment.jsx";
 import {tokenIsValid} from "@/utils/auth.js";
@@ -10,11 +10,17 @@ import Login from "@v/Auth/Login.jsx";
 
 export default () => {
   const [currentLogged, setRecoilLogged] = useRecoilState(recoilLogged)
+
+  const setUserId = useSetRecoilState(recoilUserId)
+  const setName = useSetRecoilState(recoilName)
+
   const location = useLocation()
 
   useEffect(() => {
     if(tokenIsValid()){
       setRecoilLogged(true)
+      setUserId(localStorage.getItem('userId'))
+      setName(localStorage.getItem('name'))
     } else setRecoilLogged(false)
   }, [location])
 

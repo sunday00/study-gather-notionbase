@@ -38,6 +38,17 @@ const buildProperties = (data) => {
           }
         }
         break
+      case 'relation':
+        properties[property] = {
+          relation: [{
+            id: rest[property].content.id,
+            database_id: rest[property].content.database_id,
+            single_property: {
+              name: rest[property].content.single_property.name,
+            }
+          }]
+        }
+        break
       default :
         properties[property] = {
           rich_text: [{
@@ -71,6 +82,8 @@ const buildRestQuery = ({primary, ...rest}) => {
         })
     }
   }
+
+  console.log(result)
 
   return result
 }
@@ -141,4 +154,10 @@ export const showEnds = ({db, ...query}) => api({
     },
   },
   headers: baseHeaders(),
+})
+
+export const deleteById = ({id}) => api({
+  method: 'DELETE',
+  url: `${process.env.NOTION_HOST}/blocks/${id}`,
+  headers: baseHeaders()
 })

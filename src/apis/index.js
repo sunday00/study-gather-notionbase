@@ -1,4 +1,5 @@
 import { default as api} from 'axios'
+import dayjs from "dayjs";
 
 const baseHeaders = {
   'Content-Type': 'application/json',
@@ -29,7 +30,7 @@ export const me = (nickname, realname) => api({
   params: {
     db: import.meta.env.VITE_NOTION_USER_DB,
     primary: nickname.content,
-    realname,
+    rest: JSON.stringify({realname: realname})
   },
   headers: baseHeaders
 })
@@ -69,4 +70,64 @@ export const appointmentList = (date) => api({
     primary: date,
   },
   headers: baseHeaders,
+})
+
+export const attend = (appointment, username, userId) => api({
+  method: 'POST',
+  url: import.meta.env.VITE_BACKEND + '/api/notion-post',
+  data: {
+    db: import.meta.env.VITE_NOTION_ATTEND_DB,
+    primary: {
+      name: 'id',
+      content: `${appointment.type.select.name}_${appointment.date.date.start}_${username}`
+    },
+    appointment_id: {
+      type: 'relation',
+      content: {
+        id: appointment.id,
+        database_id: import.meta.env.VITE_NOTION_APPOINT_DB,
+        single_property: {
+          name: appointment.name.title[0].plain_text
+        }
+      }
+    },
+    user_id: {
+      type: 'relation',
+      content: {
+        id: userId,
+        database_id: import.meta.env.VITE_NOTION_USER_DB,
+        single_property: {
+          name: username
+        }
+      }
+    },
+    appointed_at: {
+      type: 'date',
+      content: dayjs().format('YYYY-MM-DD')
+    },
+    state: {
+      type: 'select',
+      content: 'appointed'
+    }
+  },
+  headers: baseHeaders
+})
+
+export const attendList = (date, username) => api({
+  method: 'GET',
+  url: import.meta.env.VITE_BACKEND + '/api/notion-show-ends',
+  params: {
+    db: import.meta.env.VITE_NOTION_ATTEND_DB,
+    primary: `${date}_${username}`,
+  },
+  headers: baseHeaders,
+})
+
+export const cancelAttend = (id) => api({
+  method: 'DELETE',
+  url: import.meta.env.VITE_BACKEND + '/api/notion-delete',
+  data: {
+    db: import.meta.env.VITE_NOTION_ATTEND_DB,
+    id,
+  }
 })
