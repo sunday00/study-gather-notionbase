@@ -9,6 +9,15 @@ export default ({date}) => {
   const username = useRecoilValue(recoilName)
   const userId = useRecoilValue(recoilUserId)
 
+  // progress loop --
+  const [i, setI] = useState(1)
+
+  useEffect(() => {
+    const loop = setInterval(() => {setI((i) => i + 1)}, 100)
+    return () => clearInterval(loop)
+  }, []);
+  // -- // progress loop end
+
   useEffect(() => {
     username && appointmentList(date)
       .then(res => {
@@ -21,6 +30,7 @@ export default ({date}) => {
             })
 
             setAppointments(appointments)
+
           })
       })
   }, [date, username])
@@ -31,7 +41,7 @@ export default ({date}) => {
         case 'gathering':
           return (<span className="badge badge-warning">모집중</span>)
         default:
-          return (<span className="badge badge-error">없음</span>)
+          return (<span></span>)
       }
     }, []);
 
@@ -39,16 +49,21 @@ export default ({date}) => {
     if(isReserved) {
       cancelAttend(attendId)
         .then(res => {
-          console.log('TODO: 이제 해야 합니다.')
+          const id = appointments.findIndex((a) => a.id === appointment.id)
+          const newAppointments = [...appointments]
+          newAppointments[id].reserved = false
+          setAppointments(newAppointments)
         })
     } else {
       attend(appointment, username, userId)
         .then((res) => {
-          console.log('TODO: 이제 해야 합니다.')
+          const id = appointments.findIndex((a) => a.id === appointment.id)
+          const newAppointments = [...appointments]
+          newAppointments[id].reserved = true
+          setAppointments(newAppointments)
         })
     }
   }
-
 
   return (<div className="max-w-[430px] mx-auto">
     <table className="table table-zebra text-center">
@@ -64,20 +79,20 @@ export default ({date}) => {
         (appointments && username) ? appointments.map((appointment, idx) =>
           <tr key={idx}>
             <td>{appointment?.type?.select?.name} <br /> {appointment?.date?.date?.start}</td>
-            <td>{appointment?.place?.rich_text[0]?.plain_text ?? 'loading'} <br /> {appointment?.price?.number}</td>
+            <td>{appointment?.place?.rich_text[0]?.plain_text ?? <progress value={i % 10} max="10" />} <br /> {appointment?.price?.number}</td>
             <td>{getStateElement(appointment?.state?.select?.name)} <br />
-              {appointment.id &&
+              {(appointment.id && appointment?.state?.select?.name === 'gathering') &&
                 <button onClick={() => {
                   handleAttend(appointment, appointment.reserved, appointment.attendId)
                 }}>
-                  { (appointment.reserved ? <span className="badge badge-error">취소</span> : <span className="badge badge-info">참석</span>) }
+                  { appointment.reserved ? <span className="badge badge-error">취소</span> : <span className="badge badge-info">참석</span> }
                 </button>
               }
             </td>
           </tr>
         ) : <tr>
           <td></td>
-          <td>loading</td>
+          <td><progress value={i % 10} max="10" /></td>
           <td></td>
         </tr>
       }
