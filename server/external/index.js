@@ -156,8 +156,37 @@ export const showEnds = ({db, ...query}) => api({
   headers: baseHeaders(),
 })
 
+export const getByRangeDate = async (db, [start, end]) => {
+  let data = {
+    filter: {
+      and: [
+        {
+          property: "date",
+          date: {
+            on_or_after: start
+          }
+        },
+        {
+          property: "date",
+          date: {
+            on_or_before: end
+          }
+        },
+      ]
+    }
+  }
+
+  return await api({
+    method: 'POST',
+    url: `${process.env.NOTION_HOST}/databases/${db}/query`,
+    data,
+    headers: baseHeaders(),
+  })
+}
+
 export const deleteById = ({id}) => api({
   method: 'DELETE',
   url: `${process.env.NOTION_HOST}/blocks/${id}`,
   headers: baseHeaders()
 })
+

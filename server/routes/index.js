@@ -1,6 +1,7 @@
 import Router from 'koa-router'
 import notion from "../services/notion.js";
 import auth from "../services/auth.js";
+import payment from "../services/payment.js";
 
 const router = new Router();
 
@@ -14,5 +15,7 @@ router.get('/api/notion-show-ends', notion.showEnds)
 router.delete('/api/notion-delete', notion.deleteById)
 
 router.post('/api/login', auth.login)
+
+router.get('/api/payment', payment.myPaymentForThisMonth)
 
 export default router

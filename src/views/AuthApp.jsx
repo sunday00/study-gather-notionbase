@@ -7,6 +7,7 @@ import {useEffect} from "react";
 import Home from "@v/Home.jsx";
 import Register from "@v/Auth/Register.jsx";
 import Login from "@v/Auth/Login.jsx";
+import Calc from "@v/Study/Calc";
 
 export default () => {
   const [currentLogged, setRecoilLogged] = useRecoilState(recoilLogged)
@@ -32,6 +33,7 @@ export default () => {
       {!currentLogged && <Route path="*" element={<Navigate replace to="/login" />}></Route>}
       {currentLogged &&
         <Route path={"/appointment"} element={<Appointment/>}></Route>}
+        <Route path={"/calculate"} element={<Calc/>}></Route>}
     </Routes>
   </>)
 }

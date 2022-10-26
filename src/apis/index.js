@@ -59,7 +59,7 @@ export const appointment = (data) => api({
     date: data.date,
     state: { type:'select', content: 'gathering'}
   },
-  headers: baseHeaders,
+  headers: authHeaders,
 })
 
 export const appointmentList = (date) => api({
@@ -69,7 +69,7 @@ export const appointmentList = (date) => api({
     db: import.meta.env.VITE_NOTION_APPOINT_DB,
     primary: date,
   },
-  headers: baseHeaders,
+  headers: authHeaders,
 })
 
 export const attend = (appointment, username, userId) => api({
@@ -105,12 +105,16 @@ export const attend = (appointment, username, userId) => api({
       type: 'date',
       content: dayjs().format('YYYY-MM-DD')
     },
+    date: {
+      type: 'date',
+      content: appointment.date.date.start
+    },
     state: {
       type: 'select',
       content: 'appointed'
     }
   },
-  headers: baseHeaders
+  headers: authHeaders
 })
 
 export const attendList = (date, username) => api({
@@ -120,7 +124,7 @@ export const attendList = (date, username) => api({
     db: import.meta.env.VITE_NOTION_ATTEND_DB,
     primary: `${date}_${username}`,
   },
-  headers: baseHeaders,
+  headers: authHeaders,
 })
 
 export const cancelAttend = (id) => api({
@@ -129,5 +133,15 @@ export const cancelAttend = (id) => api({
   data: {
     db: import.meta.env.VITE_NOTION_ATTEND_DB,
     id,
-  }
+  },
+  headers: authHeaders,
+})
+
+export const payment = (month) => api({
+  method: 'GET',
+  url: import.meta.env.VITE_BACKEND + '/api/payment',
+  params: {
+    month
+  },
+  headers: authHeaders,
 })

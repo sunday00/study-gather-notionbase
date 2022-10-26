@@ -23,11 +23,12 @@ export default () => {
       <div className="flex-1">
         <a className="btn btn-ghost normal-case text-xl" href={mainUrl}>Weekly Study</a>
       </div>
-      <NavLink className={ a => `btn btn-info active-${a.isActive}` } to={'/'}>Home</NavLink>
-      { !logged && <NavLink className={ a => `btn btn-info active-${a.isActive}` } to={'/register'}>register</NavLink> }
-      { !logged && <NavLink className={ a => `btn btn-info active-${a.isActive}` } to={'/login'}>login</NavLink>}
-      { logged &&  <NavLink className={ a => `btn btn-info active-${a.isActive}` } to={'/logout'} onClick={handleLogout}>logout</NavLink>}
-      { logged &&  <NavLink className={ a => `btn btn-info active-${a.isActive}` } to={'/appointment'}>Appointment</NavLink>}
+      <NavLink className={ a => `btn btn-info btn-xs active-${a.isActive}` } to={'/'}>Home</NavLink>
+      { !logged && <NavLink className={ a => `btn btn-info btn-xs active-${a.isActive}` } to={'/register'}>register</NavLink> }
+      { !logged && <NavLink className={ a => `btn btn-info btn-xs active-${a.isActive}` } to={'/login'}>login</NavLink>}
+      { logged &&  <NavLink className={ a => `btn btn-info btn-xs active-${a.isActive}` } to={'/logout'} onClick={handleLogout}>logout</NavLink>}
+      { logged &&  <NavLink className={ a => `btn btn-info btn-xs active-${a.isActive}` } to={'/appointment'}>Appoint</NavLink>}
+      { logged &&  <NavLink className={ a => `btn btn-info btn-xs active-${a.isActive}` } to={'/calculate'}>Calc</NavLink>}
     </nav>
   )
 }
