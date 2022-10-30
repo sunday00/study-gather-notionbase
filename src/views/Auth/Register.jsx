@@ -44,7 +44,7 @@ export default () => {
           .then((res) => {
             localStorage.setItem(
               'token',
-              btoa(`${data.nickname.content}.${import.meta.env.VITE_SALT}.${data.secret_code.content}.${dayjs().add(30, 'minutes').format('YYYY-MM-DDTHH:mm:ss')}`)
+              btoa(`${data.nickname.content}.${import.meta.env.VITE_SALT}.${res.data.id}.${dayjs().add(30, 'minutes').format('YYYY-MM-DDTHH:mm:ss')}`)
             )
 
             localStorage.setItem('name', data.realname.content)

@@ -5,10 +5,10 @@ const baseHeaders = {
   'Content-Type': 'application/json',
 }
 
-const authHeaders = {
+const authHeaders = () => ({
   Authorization: `Barer ${localStorage.getItem('token')}`,
   'Content-Type': 'application/json',
-}
+})
 
 export const storeUser = ({nickname, ...rest}) => api({
   method: 'POST',
@@ -59,7 +59,7 @@ export const appointment = (data) => api({
     date: data.date,
     state: { type:'select', content: 'gathering'}
   },
-  headers: authHeaders,
+  headers: authHeaders(),
 })
 
 export const appointmentList = (date) => api({
@@ -69,7 +69,7 @@ export const appointmentList = (date) => api({
     db: import.meta.env.VITE_NOTION_APPOINT_DB,
     primary: date,
   },
-  headers: authHeaders,
+  headers: authHeaders(),
 })
 
 export const attend = (appointment, username, userId) => api({
@@ -114,7 +114,7 @@ export const attend = (appointment, username, userId) => api({
       content: 'appointed'
     }
   },
-  headers: authHeaders
+  headers: authHeaders()
 })
 
 export const attendList = (date, username) => api({
@@ -124,7 +124,7 @@ export const attendList = (date, username) => api({
     db: import.meta.env.VITE_NOTION_ATTEND_DB,
     primary: `${date}_${username}`,
   },
-  headers: authHeaders,
+  headers: authHeaders(),
 })
 
 export const cancelAttend = (id) => api({
@@ -134,14 +134,14 @@ export const cancelAttend = (id) => api({
     db: import.meta.env.VITE_NOTION_ATTEND_DB,
     id,
   },
-  headers: authHeaders,
+  headers: authHeaders(),
 })
 
 export const payment = (month) => api({
   method: 'GET',
   url: import.meta.env.VITE_BACKEND + '/api/payment',
   params: {
-    month
+    month,
   },
-  headers: authHeaders,
+  headers: authHeaders(),
 })

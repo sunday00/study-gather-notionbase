@@ -1,24 +1,25 @@
 import {useCallback, useEffect, useState} from "react";
 import {useRecoilValue} from "recoil";
-import {recoilName} from "@/store/auth.js";
+import {recoilUserId} from "@/store/auth.js";
 import dayjs from "dayjs";
 import {payment} from "@/apis/index.js";
 
 export default () => {
-  const username = useRecoilValue(recoilName)
+  const userId = useRecoilValue(recoilUserId)
   const [month, setMonth] = useState(dayjs().format('M'))
 
   const getMonthCalc = useCallback(() => {
     payment(month)
       .then((res) => {
-        console.log(res.data)
+        const myAttendsList = res.data.attendsList.filter((a) => a.me)
+        const totalPrice = myAttendsList.map(a => a.price / a.attendsCount)
 
-
+        console.log(totalPrice.reduce((tot, cur) => tot + cur))
       })
   }, [month])
 
   useEffect(() => {
-    username && getMonthCalc()
+    userId && getMonthCalc()
   }, [])
 
   const handleChange = (e) => {
