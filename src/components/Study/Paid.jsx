@@ -7,6 +7,8 @@ export default ({userId, appointmentId}) => {
 
     // paidByMe(userId, appointmentId)
     window.alert('unsupported.')
+
+    window.open('https://www.notion.so/sunday00-study/f286c7c472df4918a2006939f019d60d?v=82592bd5ede84f5c968495fa3f792e1b', '_blank')
   }
 
   return (
