@@ -145,3 +145,18 @@ export const payment = (month) => api({
   },
   headers: authHeaders(),
 })
+
+export const paidByMe = (appointId, userId) => api({
+  method: 'PATCH',
+  url: import.meta.env.VITE_BACKEND + '/api/notion-patch',
+  data: {
+    db: import.meta.env.VITE_NOTION_APPOINT_DB,
+    blockId: appointId,
+    update: {
+      type: 'relation',
+      column: 'paid_user',
+      value: userId,
+    },
+  },
+  headers: authHeaders(),
+})

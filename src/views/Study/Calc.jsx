@@ -7,14 +7,20 @@ import {payment} from "@/apis/index.js";
 export default () => {
   const userId = useRecoilValue(recoilUserId)
   const [month, setMonth] = useState(dayjs().format('M'))
+  const [price, setPrice] = useState(0)
+  const [load, setLoad] = useState(true)
 
   const getMonthCalc = useCallback(() => {
     payment(month)
       .then((res) => {
         const myAttendsList = res.data.attendsList.filter((a) => a.me)
         const totalPrice = myAttendsList.map(a => a.price / a.attendsCount)
+        const myPaid = res.data.myPaid
+        const myPrice = totalPrice.length ? totalPrice.reduce((tot, cur) => tot + cur) : 0
 
-        console.log(totalPrice.reduce((tot, cur) => tot + cur))
+        setPrice(myPrice - myPaid)
+
+        setLoad(false)
       })
   }, [month])
 
@@ -29,10 +35,13 @@ export default () => {
   const handleSubmit = (e) => {
     e.preventDefault()
 
+    setPrice(0)
+
     getMonthCalc()
   }
 
-  return (<form className="flex flex-col justify-center p-16 w-full" onSubmit={handleSubmit}>
+  return (<div>
+    <form className="flex flex-col justify-center p-16 w-full" onSubmit={handleSubmit}>
       <div className="form-control w-[60%] max-w-xs mx-auto mb-8">
         <label className="label" htmlFor="month">
           <span className="label-text">month</span>
@@ -41,5 +50,13 @@ export default () => {
                id="month" name="month" defaultValue={month} onChange={handleChange}/>
       </div>
       <input type="submit" className="btn btn-info btn-sm inline mx-auto" value="submit"/>
-    </form>)
+    </form>
+    <div>
+      { !load ?
+        <p className="text-center p-8 text-3xl">
+          {price < 0 ? <span>이 달에는 내가 돈을 많이 냈습니다. {price}원을 받으세요.</span> : <span>총 {price}원</span>}
+        </p> : <p className="text-center p-8 text-3xl">Loading</p>
+      }
+    </div>
+  </div>)
 }

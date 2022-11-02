@@ -190,3 +190,13 @@ export const deleteById = ({id}) => api({
   headers: baseHeaders()
 })
 
+export const patchById = async (body) => api({
+  method: 'PATCH',
+  url: `${process.env.NOTION_HOST}/blocks/${body.blockId}`,
+  data: {
+      table: {
+
+      }
+  },
+  headers: baseHeaders()
+})

@@ -54,13 +54,15 @@ export default {
 
     if(attendItem.date !== '') attendsList.push({...attendItem})
 
-    const myPaid = appointments.data.results.map((a) => {
-      if(a.properties.paid_user.relation[0].id === id) {
+    const paidArray = appointments.data.results.map((a) => {
+      if(a.properties.paid_user.relation[0]?.id === id) {
         return a.properties.price.number
       }
 
       return 0
-    }).reduce((tot, cur) => tot + cur)
+    })
+
+    const myPaid = paidArray.length ? paidArray.reduce((tot, cur) => tot + cur) : 0
 
     ctx.status = 200
     ctx.body = {attendsList, myPaid}

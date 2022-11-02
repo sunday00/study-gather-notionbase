@@ -4,6 +4,8 @@ import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import AppointmentList from "@c/Study/AppointmentList.jsx";
 import AppointmentCreater from "@c/Study/AppointmentCreater.jsx";
+import {useRecoilValue} from "recoil";
+import {recoilUserId} from "@/store/auth.js";
 
 dayjs.extend(weekday)
 dayjs.extend(utc)
@@ -13,9 +15,11 @@ const calculateThisSunday = current.day() ? 7 : 0
 const date = current.weekday(calculateThisSunday).format('YYYY-MM-DD')
 
 export default () => {
-  return (<div>
-      <AppointmentList date={date} />
+  const userId = useRecoilValue(recoilUserId)
 
-      <AppointmentCreater date={date} />
-    </div>)
+  return (<div>
+    <AppointmentList date={date}/>
+
+    {import.meta.env.VITE_LEAD_MEMBER === userId ? <AppointmentCreater date={date}/> : ''}
+  </div>)
 }

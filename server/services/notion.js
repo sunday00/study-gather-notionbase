@@ -1,4 +1,4 @@
-import {post, show, showEnds, deleteById} from "../external/index.js";
+import {post, show, showEnds, deleteById, patchById} from "../external/index.js";
 
 export default {
   async post(ctx) {
@@ -53,6 +53,21 @@ export default {
         ctx.status = 204;
         ctx.body = {
           'message': 'successfully deleted'
+        }
+      }).catch(e => {
+        console.dir(e.response?.data)
+        ctx.status = e.response.data.status
+        ctx.body = e.response.data.message
+      })
+  },
+
+  async patchById(ctx) {
+    console.log(ctx.request.body)
+    await patchById(ctx.request.body)
+      .then(res => {
+        ctx.status = 200;
+        ctx.body = {
+          'message': 'successfully updated'
         }
       }).catch(e => {
         console.dir(e.response?.data)
