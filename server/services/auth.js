@@ -1,8 +1,8 @@
 import {showWhere} from "../external/index.js";
 import btoa from 'btoa'
 import dayjs from "dayjs";
-import timezone from "dayjs/plugin/timezone";
-import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone.js";
+import utc from "dayjs/plugin/utc.js";
 
 export default {
   async login(ctx){
