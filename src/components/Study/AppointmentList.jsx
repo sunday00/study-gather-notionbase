@@ -2,7 +2,6 @@ import {useCallback, useEffect, useState} from "react";
 import {appointmentList, attend, attendList, cancelAttend} from "@/apis/index.js";
 import {useRecoilValue} from "recoil";
 import {recoilName, recoilUserId} from "@/store/auth.js";
-import Paid from "@c/Study/Paid.jsx";
 
 export default ({date}) => {
   const [appointments, setAppointments] = useState([{}])
@@ -73,7 +72,6 @@ export default ({date}) => {
           <th>type/date</th>
           <th>place/price</th>
           <th>state/attend</th>
-          <th>paid by me</th>
         </tr>
       </thead>
       <tbody>
@@ -91,13 +89,10 @@ export default ({date}) => {
                 </button>
               }
             </td>
-            <td>
-              {appointment.id && <Paid userId={userId} appointmentId={appointment.id}></Paid>}
-            </td>
           </tr>
         ) : <tr>
           <td></td>
-          <td colSpan='2'><progress value={i % 10} max="10" /></td>
+          <td><progress value={i % 10} max="10" /></td>
           <td></td>
         </tr>
       }
